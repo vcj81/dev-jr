@@ -1,0 +1,14 @@
+{
+  "name": "vcj81-plugins",
+  "owner": {
+    "name": "vcj81",
+    "url": "https://github.com/vcj81"
+  },
+  "plugins": [
+    {
+      "name": "claude-alertas",
+      "source": "./plugins/claude-alertas",
+      "description": "Alertas sonoros e notificacoes do Windows quando o Claude Code precisa de interacao ou termina uma tarefa"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "claude-alertas",
+  "version": "1.0.0",
+  "description": "Alertas sonoros e notificacoes do Windows quando o Claude Code precisa de interacao ou termina uma tarefa",
+  "author": {
+    "name": "vcj81",
+    "url": "https://github.com/vcj81"
+  }
+}
