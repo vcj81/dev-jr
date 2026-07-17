@@ -1,6 +1,6 @@
 {
   "name": "claude-ferramentas",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Ferramentas do Claude Code: alertas sonoros e notificacoes do Windows, e skills de fluxo de trabalho (commit com aprovacao previa, padroes de criacao de arquivos)",
   "author": {
     "name": "vcj81",

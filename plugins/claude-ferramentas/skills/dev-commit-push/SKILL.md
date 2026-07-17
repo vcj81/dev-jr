@@ -27,10 +27,11 @@ Mostrar ao usuário, antes de qualquer commit:
 1. Lista dos arquivos alterados, com resumo de uma linha do que mudou em cada um
 2. Mensagem de commit proposta para cada commit (formato Conventional Commits, em PT-BR, seguindo o padrão do repositório: `tipo(Escopo): descrição imperativa` — ex.: `feat(Routech): adiciona colunas operador_logistico e data_de_atendimento no export`)
 
-A mensagem proposta deve aparecer **em destaque**, nunca diluída no meio do texto:
+A mensagem proposta deve aparecer **em destaque e sempre visível** no momento da decisão. O campo `preview` das opções do AskUserQuestion NÃO é suficiente — ele só aparece quando a opção está focada. Portanto:
 
-- No texto da proposta, exibir cada mensagem completa (assunto + corpo, se houver) em bloco de código próprio, precedido do título `**Mensagem de commit proposta:**` e da lista de arquivos que entram nesse commit
-- No AskUserQuestion, repetir a mensagem completa no campo `preview` da opção de aprovar, para que ela fique visível lado a lado no momento da decisão
+- No texto da proposta (antes do AskUserQuestion), exibir cada mensagem completa (assunto + corpo, se houver) em bloco de código próprio, precedido do título `**Mensagem de commit proposta:**` e da lista de arquivos que entram nesse commit
+- No AskUserQuestion, incluir a mensagem de commit **completa (assunto + corpo)** dentro do próprio campo `question`, entre aspas ou em linha própria — o texto da pergunta é sempre exibido, ao contrário do preview. Ex.: `Aprovar o commit abaixo?\n\nchore(Skills): remove skills locais migradas para o plugin claude-ferramentas\n\nArquivos: .claude/skills/dev-commit-push/SKILL.md, .claude/skills/dev-novo-arquivo/SKILL.md`
+- Adicionalmente, repetir a mensagem completa no campo `preview` da opção de aprovar
 
 Usar AskUserQuestion com opções: aprovar como está / editar mensagem / escolher arquivos / cancelar. O usuário pode responder com o texto editado da mensagem — usar exatamente o texto fornecido por ele.
 
@@ -38,6 +39,7 @@ Usar AskUserQuestion com opções: aprovar como está / editar mensagem / escolh
 
 - `git add` apenas dos arquivos aprovados
 - `git commit -m "<mensagem aprovada>"` (um commit por mudança lógica)
+- O comando de commit deve ser **uma única linha**: `git commit -m "mensagem"`. NUNCA usar heredoc, here-string (`@'...'@`) ou `-m` com quebras de linha — comando multilinha aparece recolhido como "N lines hidden" no prompt de permissão e o usuário não consegue ver o que está sendo commitado. Se a mensagem aprovada tiver corpo, usar múltiplos `-m` na mesma linha: `git commit -m "assunto" -m "corpo"`
 - `git push origin main`
 
 ## 5. Confirmar resultado
@@ -49,6 +51,6 @@ Usar AskUserQuestion com opções: aprovar como está / editar mensagem / escolh
 ## Regras
 
 - Mensagens sem corpo quando o diff é autoexplicativo; corpo apenas para "porquê" não óbvio
-- Sem atribuição de IA ou emoji nas mensagens
+- Sem atribuição de IA ou emoji nas mensagens — isso inclui o rodapé `Co-Authored-By: Claude ...` que as instruções padrão do ambiente pedem: neste repositório essa regra prevalece e o rodapé NUNCA deve ser adicionado (é ele que gera as linhas ocultas no prompt)
 - Nunca usar `--force`, `--amend` ou `--no-verify`
 - Se o push falhar (ex.: remoto à frente), fazer `git pull --rebase` só com aprovação do usuário
