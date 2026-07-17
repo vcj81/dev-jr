@@ -10,7 +10,7 @@ Plugin do Claude Code com alertas e skills de fluxo de trabalho.
 ## Skills
 
 - **dev-commit-push** — commit + push com aprovação prévia obrigatória da mensagem e dos arquivos
-- **dev-novo-arquivo** — padrões do projeto SIGA para criação de arquivos novos (PT-BR, rastreabilidade, comentários didáticos)
+- **dev-novo-arquivo** — documentação didática em todo arquivo novo: breve explicação no topo + comentários inline, em PT-BR (o usuário está aprendendo a linguagem)
 
 ## Instalação em uma máquina nova
 
