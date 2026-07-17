@@ -8,8 +8,15 @@ Plugin do Claude Code com alertas sonoros e notificações do Windows:
 ## Instalação em uma máquina nova
 
 ```
-claude marketplace add vcj81/claude-alertas
+claude plugin marketplace add vcj81/claude-alertas
 claude plugin install claude-alertas@vcj81-plugins
+```
+
+Ou, dentro de uma sessão interativa do Claude Code:
+
+```
+/plugin marketplace add vcj81/claude-alertas
+/plugin install claude-alertas@vcj81-plugins
 ```
 
 Pronto — vale para todos os projetos da máquina.
