@@ -11,6 +11,7 @@ Plugin do Claude Code com alertas e skills de fluxo de trabalho.
 
 - **dev-commit-push** — commit + push com aprovação prévia obrigatória da mensagem e dos arquivos
 - **dev-novo-arquivo** — documentação didática em todo arquivo novo: breve explicação no topo + comentários inline, em PT-BR (o usuário está aprendendo a linguagem)
+- **dev-padroes-projeto** — padrões de arquitetura para todo projeto: toda interface web deve nascer preparada para instalação como PWA (manifest, service worker, HTTPS)
 
 ## Instalação em uma máquina nova
 
@@ -38,6 +39,7 @@ plugins/claude-ferramentas/
   scripts/notify.ps1                 # som + toast do Windows
   skills/dev-commit-push/SKILL.md    # commit com aprovação prévia
   skills/dev-novo-arquivo/SKILL.md   # padrões de criação de arquivos
+  skills/dev-padroes-projeto/SKILL.md # padrões de projeto (PWA obrigatório)
 ```
 
 ## Requisitos
