@@ -6,9 +6,9 @@
   },
   "plugins": [
     {
-      "name": "claude-alertas",
-      "source": "./plugins/claude-alertas",
-      "description": "Alertas sonoros e notificacoes do Windows quando o Claude Code precisa de interacao ou termina uma tarefa"
+      "name": "claude-ferramentas",
+      "source": "./plugins/claude-ferramentas",
+      "description": "Ferramentas do Claude Code: alertas sonoros e notificacoes do Windows, e skills de fluxo de trabalho (commit com aprovacao previa, padroes de criacao de arquivos)"
     }
   ]
 }
