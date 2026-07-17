@@ -15,14 +15,14 @@ Plugin do Claude Code com alertas e skills de fluxo de trabalho.
 ## Instalação em uma máquina nova
 
 ```
-claude plugin marketplace add vcj81/claude-alertas
+claude plugin marketplace add vcj81/claude-ferramentas
 claude plugin install claude-ferramentas@vcj81-plugins
 ```
 
 Ou, dentro de uma sessão interativa do Claude Code:
 
 ```
-/plugin marketplace add vcj81/claude-alertas
+/plugin marketplace add vcj81/claude-ferramentas
 /plugin install claude-ferramentas@vcj81-plugins
 ```
 
