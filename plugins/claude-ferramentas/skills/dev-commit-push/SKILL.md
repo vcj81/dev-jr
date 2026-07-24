@@ -27,11 +27,12 @@ Mostrar ao usuário, antes de qualquer commit:
 1. Lista dos arquivos alterados, com resumo de uma linha do que mudou em cada um
 2. Mensagem de commit proposta para cada commit (formato Conventional Commits, em PT-BR, seguindo o padrão do repositório: `tipo(Escopo): descrição imperativa` — ex.: `feat(Routech): adiciona colunas operador_logistico e data_de_atendimento no export`)
 
-A mensagem proposta deve aparecer **em destaque e sempre visível** no momento da decisão. O campo `preview` das opções do AskUserQuestion NÃO é suficiente — ele só aparece quando a opção está focada. Portanto:
+A mensagem proposta deve aparecer **em destaque e sempre visível** no momento da decisão. Nem o campo `question` nem o `preview` do AskUserQuestion são confiáveis para isso — a UI corta ambos e mostra só a primeira linha, mesmo com `\n` no meio do texto. Portanto:
 
-- No texto da proposta (antes do AskUserQuestion), exibir cada mensagem completa (assunto + corpo, se houver) em bloco de código próprio, precedido do título `**Mensagem de commit proposta:**` e da lista de arquivos que entram nesse commit
-- No AskUserQuestion, incluir a mensagem de commit **completa (assunto + corpo)** dentro do próprio campo `question`, entre aspas ou em linha própria — o texto da pergunta é sempre exibido, ao contrário do preview. Ex.: `Aprovar o commit abaixo?\n\nchore(Skills): remove skills locais migradas para o plugin claude-ferramentas\n\nArquivos: .claude/skills/dev-commit-push/SKILL.md, .claude/skills/dev-novo-arquivo/SKILL.md`
-- Adicionalmente, repetir a mensagem completa no campo `preview` da opção de aprovar
+- A fonte confiável é o texto normal (markdown), em bloco de código próprio, precedido do título `**Mensagem de commit proposta:**` e da lista de arquivos que entram nesse commit. Esse bloco tem que estar 100% visível, nunca resumido ou cortado.
+- Esse bloco deve ser a ÚLTIMA coisa exibida antes de chamar o AskUserQuestion, colado à pergunta, sem nenhum outro texto entre os dois — a chamada da tool deve vir imediatamente depois do bloco, na mesma resposta, para os dois ficarem juntos na tela e o usuário não precisar rolar pra ver a mensagem.
+- O `question` do AskUserQuestion deve ser curto (ex.: `Aprovar o commit acima?`), só referenciando a mensagem já mostrada — não tentar reproduzir assunto+corpo ali, pois a UI corta pra 1 linha.
+- Não depender do `preview` das opções para mostrar a mensagem completa (mesmo problema de corte); pode ser usado só como reforço curto, nunca como única exibição.
 
 Usar AskUserQuestion com opções: aprovar como está / editar mensagem / escolher arquivos / cancelar. O usuário pode responder com o texto editado da mensagem — usar exatamente o texto fornecido por ele.
 
