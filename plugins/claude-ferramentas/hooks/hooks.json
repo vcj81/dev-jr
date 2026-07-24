@@ -1,6 +1,18 @@
 {
-  "description": "Som + notificacao do Windows quando o Claude precisa de interacao (Notification) ou termina a tarefa (Stop)",
+  "description": "PreToolUse (Write): bloqueia arquivo novo de codigo sem comentarios minimos (reforca skill dev-novo-arquivo). Notification/Stop: som + notificacao do Windows.",
   "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PLUGIN_ROOT}/scripts/check-novo-arquivo.ps1\"",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
     "Notification": [
       {
         "hooks": [

@@ -16,3 +16,7 @@ O usuário está aprendendo a linguagem. Todo arquivo novo criado pelo Claude de
 - Usar a sintaxe de comentário da linguagem do arquivo: `#` em Python, `//` ou `/* */` em JS/TS/CSS, `<!-- -->` em HTML/Markdown, `--` em SQL.
 - Comentar para ensinar, não para repetir o óbvio: explicar o porquê e o papel do trecho, não traduzir linha a linha.
 - Ao encerrar, explicar ao usuário em 2–3 frases onde o arquivo entrou e por quê.
+
+## Reforço determinístico (hook)
+
+Existe um hook `PreToolUse` (`hooks/check-novo-arquivo.ps1`) que bloqueia o `Write` de arquivo novo em linguagem mapeada (py, js/ts, java, c/cpp/cs, go, php, rb, ps1, sh, css, html, sql, rs, kt, swift) quando o conteúdo tem mais de 3 linhas não vazias e menos de 2 linhas de comentário. É rede de segurança grosseira — só verifica presença mínima de comentário, não qualidade. Não substitui seguir as regras acima; se o hook bloquear, ajustar o conteúdo e reenviar o `Write`.
