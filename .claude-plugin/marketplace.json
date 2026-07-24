@@ -6,8 +6,8 @@
   },
   "plugins": [
     {
-      "name": "claude-ferramentas",
-      "source": "./plugins/claude-ferramentas",
+      "name": "dev-utils",
+      "source": "./plugins/dev-utils",
       "description": "Ferramentas do Claude Code: alertas sonoros e notificacoes do Windows, e skills de fluxo de trabalho (commit com aprovacao previa, padroes de criacao de arquivos)"
     }
   ]

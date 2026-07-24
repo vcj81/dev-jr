@@ -1,4 +1,4 @@
-# claude-ferramentas
+# dev-utils
 
 Plugin do Claude Code com alertas e skills de fluxo de trabalho.
 
@@ -18,14 +18,14 @@ Plugin do Claude Code com alertas e skills de fluxo de trabalho.
 
 ```
 claude plugin marketplace add vcj81/claude-ferramentas
-claude plugin install claude-ferramentas@vcj81-plugins
+claude plugin install dev-utils@vcj81-plugins
 ```
 
 Ou, dentro de uma sessão interativa do Claude Code:
 
 ```
 /plugin marketplace add vcj81/claude-ferramentas
-/plugin install claude-ferramentas@vcj81-plugins
+/plugin install dev-utils@vcj81-plugins
 ```
 
 Pronto — vale para todos os projetos da máquina.
@@ -34,7 +34,7 @@ Pronto — vale para todos os projetos da máquina.
 
 ```
 .claude-plugin/marketplace.json      # registro do marketplace (vcj81-plugins)
-plugins/claude-ferramentas/
+plugins/dev-utils/
   .claude-plugin/plugin.json         # manifesto do plugin
   hooks/hooks.json                   # hooks Notification e Stop
   scripts/notify.ps1                 # som + toast do Windows
