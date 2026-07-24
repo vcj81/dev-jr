@@ -27,12 +27,11 @@ Mostrar ao usuário, antes de qualquer commit:
 1. Lista dos arquivos alterados, com resumo de uma linha do que mudou em cada um
 2. Mensagem de commit proposta para cada commit (formato Conventional Commits, em PT-BR, seguindo o padrão do repositório: `tipo(Escopo): descrição imperativa` — ex.: `feat(Routech): adiciona colunas operador_logistico e data_de_atendimento no export`)
 
-A mensagem proposta deve aparecer **em destaque e sempre visível** no momento da decisão. Nem o campo `question` nem o `preview` do AskUserQuestion são confiáveis para isso — a UI corta ambos e mostra só a primeira linha, mesmo com `\n` no meio do texto. Portanto:
+A mensagem proposta deve aparecer **em destaque e sempre visível** no momento da decisão, ao lado da pergunta — não só rolando a tela pra cima. O campo `question` sozinho corta pra 1 linha; usar os dois recursos juntos:
 
-- A fonte confiável é o texto normal (markdown), em bloco de código próprio, precedido do título `**Mensagem de commit proposta:**` e da lista de arquivos que entram nesse commit. Esse bloco tem que estar 100% visível, nunca resumido ou cortado.
-- Esse bloco deve ser a ÚLTIMA coisa exibida antes de chamar o AskUserQuestion, colado à pergunta, sem nenhum outro texto entre os dois — a chamada da tool deve vir imediatamente depois do bloco, na mesma resposta, para os dois ficarem juntos na tela e o usuário não precisar rolar pra ver a mensagem.
-- O `question` do AskUserQuestion deve ser curto (ex.: `Aprovar o commit acima?`), só referenciando a mensagem já mostrada — não tentar reproduzir assunto+corpo ali, pois a UI corta pra 1 linha.
-- Não depender do `preview` das opções para mostrar a mensagem completa (mesmo problema de corte); pode ser usado só como reforço curto, nunca como única exibição.
+- Bloco de código no texto normal (markdown), precedido do título `**Mensagem de commit proposta:**` e da lista de arquivos que entram nesse commit, colado imediatamente antes da chamada do AskUserQuestion (sem texto entre os dois, mesma resposta) — serve de registro completo e scrollback.
+- No campo `preview` da opção "Aprovar como está" (e replicado nas demais opções), colar a mensagem completa (assunto + corpo). A UI renderiza isso num painel lateral ao lado da lista de opções — é o que garante "em destaque ao lado da pergunta" sem precisar rolar.
+- O `question` continua curto (ex.: `Aprovar o commit acima?`), só referenciando a mensagem já mostrada nos dois lugares acima.
 
 Usar AskUserQuestion com opções: aprovar como está / editar mensagem / escolher arquivos / cancelar. O usuário pode responder com o texto editado da mensagem — usar exatamente o texto fornecido por ele.
 
@@ -48,6 +47,7 @@ Usar AskUserQuestion com opções: aprovar como está / editar mensagem / escolh
 - Mostrar hashes dos commits criados e o range enviado no push
 - Confirmar `git status` limpo e `git log origin/main..HEAD` vazio
 - Se algum `.csp`/`.cls` commitado ainda não foi compilado no servidor, lembrar o usuário
+- Se o repositório for um plugin do Claude Code (existe `.claude-plugin/marketplace.json` ou `.claude-plugin/plugin.json` na raiz) e o commit alterou arquivos do plugin, lembrar: instalação não atualiza sozinha em outras máquinas/projetos — rodar `/plugin marketplace update <nome-marketplace>` e `/plugin update <nome-plugin>` em cada uma para pegar a mudança
 
 ## Regras
 
