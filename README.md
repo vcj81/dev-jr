@@ -12,6 +12,7 @@ Plugin do Claude Code com alertas e skills de fluxo de trabalho.
 - **dev-commit-push** — commit + push com aprovação prévia obrigatória da mensagem e dos arquivos
 - **dev-novo-arquivo** — documentação didática em todo arquivo novo: breve explicação no topo + comentários inline, em PT-BR (o usuário está aprendendo a linguagem)
 - **dev-padroes-projeto** — padrões de arquitetura para todo projeto: toda interface web deve nascer preparada para instalação como PWA (manifest, service worker, HTTPS)
+- **dev-deploy-prod** — deploy de classes/páginas num servidor IRIS/Caché de produção via API Atelier, com aprovação prévia da lista de itens, backup XML automático (rollback) e retenção dos 3 mais recentes. Config/segredos/backups ficam sempre no repositório alvo (`.claude/dev-deploy-prod/`), nunca no plugin — espera repo com estrutura `src/cls`, `src/mac`, `src/inc`, `src/oth`
 
 ## Instalação em uma máquina nova
 
@@ -40,6 +41,9 @@ plugins/claude-ferramentas/
   skills/dev-commit-push/SKILL.md    # commit com aprovação prévia
   skills/dev-novo-arquivo/SKILL.md   # padrões de criação de arquivos
   skills/dev-padroes-projeto/SKILL.md # padrões de projeto (PWA obrigatório)
+  skills/dev-deploy-prod/SKILL.md    # deploy em produção IRIS/Caché (API Atelier)
+  skills/dev-deploy-prod/deploy.py   # script do deploy (config/backups ficam no repo alvo)
+  skills/dev-deploy-prod/.env.example
 ```
 
 ## Requisitos
