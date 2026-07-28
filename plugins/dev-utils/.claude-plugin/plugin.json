@@ -1,7 +1,7 @@
 {
   "name": "dev-utils",
-  "version": "1.4.0",
-  "description": "Ferramentas do Claude Code: alertas sonoros e notificacoes do Windows, e skills de fluxo de trabalho (commit com aprovacao previa, padroes de criacao de arquivos, padroes de projeto com PWA obrigatorio, deploy em producao IRIS/Cache via API Atelier)",
+  "version": "2.0.0",
+  "description": "Ferramentas do Claude Code: alertas sonoros e notificacoes do Windows, e skills de fluxo de trabalho (commit com aprovacao previa, comentarios em arquivo novo e nas alteracoes antes do commit, padroes de projeto com PWA obrigatorio, deploy em producao IRIS/Cache via API Atelier)",
   "author": {
     "name": "vcj81",
     "url": "https://github.com/vcj81"

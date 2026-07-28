@@ -1,5 +1,5 @@
 {
-  "description": "PreToolUse (Write): bloqueia arquivo novo de codigo sem comentarios minimos (reforca skill dev-novo-arquivo). Notification/Stop: som + notificacao do Windows.",
+  "description": "PreToolUse (Write): bloqueia arquivo novo de codigo sem comentarios minimos (reforca a parte A da skill dev-comentarios). Notification/Stop: som + notificacao do Windows.",
   "hooks": {
     "PreToolUse": [
       {

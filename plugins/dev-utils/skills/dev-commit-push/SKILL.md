@@ -20,7 +20,20 @@ Se não houver nada para commitar nem para enviar, informar e encerrar.
 - Mudanças não relacionadas → commits separados
 - Identificar ruído (arquivos de configuração local, reexportação sem mudança real de conteúdo, ex.: `.vscode/settings.json`, minificados rejuntados) e propor deixar de fora ou descartar
 
-## 3. Propor e aguardar aprovação
+## 3. Verificar se o código foi comentado
+
+Antes de propor o commit, checar se cada bloco alterado tem comentário de rastreio no padrão da skill `dev-comentarios` (`[Alteração] Autor: Junior | Data/Hora: ...`).
+
+Como checar: para cada arquivo de código **modificado** (novos, deletados, dados/config e mudanças cosméticas ficam de fora — mesmos critérios da `dev-comentarios`), comparar os hunks de `git diff -U3` / `git diff --cached -U3` com os marcadores `[Alteração]` presentes no diff. Bloco alterado sem marcador correspondente = faltante.
+
+Reportar sempre, mesmo quando estiver tudo certo:
+
+- **Comentários já presentes**: lista `arquivo:linha` + o texto do marcador
+- **Blocos alterados sem comentário**: lista `arquivo:linha` + resumo de uma linha do que mudou ali
+
+Se houver faltantes, perguntar com AskUserQuestion antes de seguir: acionar `/dev-comentarios` para comentar agora / commitar mesmo assim sem comentar / cancelar. Se o usuário escolher comentar, rodar a skill `dev-comentarios`, e só então voltar ao passo 4 — refazendo o `git status`/`git diff`, já que os arquivos mudaram.
+
+## 4. Propor e aguardar aprovação
 
 Mostrar ao usuário, antes de qualquer commit:
 
@@ -35,14 +48,14 @@ A mensagem proposta deve aparecer **em destaque e sempre visível** no momento d
 
 Usar AskUserQuestion com opções: aprovar como está / editar mensagem / escolher arquivos / cancelar. O usuário pode responder com o texto editado da mensagem — usar exatamente o texto fornecido por ele.
 
-## 4. Executar somente após aprovação
+## 5. Executar somente após aprovação
 
 - `git add` apenas dos arquivos aprovados
 - `git commit -m "<mensagem aprovada>"` (um commit por mudança lógica)
 - O comando de commit deve ser **uma única linha**: `git commit -m "mensagem"`. NUNCA usar heredoc, here-string (`@'...'@`) ou `-m` com quebras de linha — comando multilinha aparece recolhido como "N lines hidden" no prompt de permissão e o usuário não consegue ver o que está sendo commitado. Se a mensagem aprovada tiver corpo, usar múltiplos `-m` na mesma linha: `git commit -m "assunto" -m "corpo"`
 - `git push origin main`
 
-## 5. Confirmar resultado
+## 6. Confirmar resultado
 
 - Mostrar hashes dos commits criados e o range enviado no push
 - Confirmar `git status` limpo e `git log origin/main..HEAD` vazio
