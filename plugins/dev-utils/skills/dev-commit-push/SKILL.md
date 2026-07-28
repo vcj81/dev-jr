@@ -1,11 +1,11 @@
 ---
 name: dev-commit-push
-description: Commit + push das últimas alterações no git. Lista os arquivos alterados e propõe a mensagem de commit para aprovação ou edição do usuário ANTES de commitar e enviar. Usar quando o usuário pedir para commitar/enviar alterações ao git ou invocar /dev-commit-push.
+description: Commit + push das últimas alterações no git. Lista os arquivos alterados e propõe a mensagem de commit para aprovação ou edição do usuário ANTES de commitar. O push NUNCA é automático — é sempre perguntado em separado, depois do commit. Usar quando o usuário pedir para commitar/enviar alterações ao git ou invocar /dev-commit-push.
 ---
 
 # Commit + Push com aprovação prévia
 
-Fluxo obrigatório — NUNCA commitar ou fazer push antes da aprovação explícita do usuário.
+Fluxo obrigatório — NUNCA commitar ou fazer push antes da aprovação explícita do usuário. Commit e push são **duas aprovações separadas**: aprovar o commit nunca autoriza o push.
 
 ## 1. Levantar alterações
 
@@ -13,7 +13,11 @@ Fluxo obrigatório — NUNCA commitar ou fazer push antes da aprovação explíc
 - `git diff` (e `git diff --stat`) — entender o conteúdo das mudanças
 - `git log origin/main..HEAD --oneline` — commits locais ainda não enviados
 
-Se não houver nada para commitar nem para enviar, informar e encerrar.
+Decidir a partir daí:
+
+- **Nada para commitar e nada para enviar** → informar e encerrar.
+- **Nada para commitar, mas existem commits locais não enviados** (caso típico de quem recusou o push numa execução anterior) → pular os passos 2–5 e ir direto ao passo 6, listando esses commits e perguntando se quer enviar agora.
+- **Há alterações para commitar** → seguir o fluxo normal a partir do passo 2.
 
 ## 2. Separar mudanças lógicas
 
@@ -48,17 +52,32 @@ A mensagem proposta deve aparecer **em destaque e sempre visível** no momento d
 
 Usar AskUserQuestion com opções: aprovar como está / editar mensagem / escolher arquivos / cancelar. O usuário pode responder com o texto editado da mensagem — usar exatamente o texto fornecido por ele.
 
-## 5. Executar somente após aprovação
+## 5. Commitar somente após aprovação
 
 - `git add` apenas dos arquivos aprovados
 - `git commit -m "<mensagem aprovada>"` (um commit por mudança lógica)
 - O comando de commit deve ser **uma única linha**: `git commit -m "mensagem"`. NUNCA usar heredoc, here-string (`@'...'@`) ou `-m` com quebras de linha — comando multilinha aparece recolhido como "N lines hidden" no prompt de permissão e o usuário não consegue ver o que está sendo commitado. Se a mensagem aprovada tiver corpo, usar múltiplos `-m` na mesma linha: `git commit -m "assunto" -m "corpo"`
-- `git push origin main`
 
-## 6. Confirmar resultado
+**PARAR AQUI.** Não executar `git push` nesta etapa. O push só acontece depois da aprovação separada do passo 6.
 
-- Mostrar hashes dos commits criados e o range enviado no push
-- Confirmar `git status` limpo e `git log origin/main..HEAD` vazio
+## 6. Perguntar sobre o push (sempre)
+
+O push **nunca** é automático, mesmo que o usuário tenha aprovado o commit e mesmo que a skill tenha sido invocada como "commitar e enviar".
+
+Mostrar antes de perguntar:
+
+- Hashes e mensagens dos commits pendentes de envio (`git log origin/main..HEAD --oneline`)
+- Branch e remoto de destino (ex.: `origin/main`)
+
+Perguntar com AskUserQuestion: enviar agora (`git push origin main`) / não enviar agora.
+
+- **Enviar agora** → executar `git push origin main` e seguir ao passo 7.
+- **Não enviar agora** → encerrar informando que os commits ficaram locais e que na próxima execução da skill a pergunta do push será refeita (passo 1).
+
+## 7. Confirmar resultado
+
+- Mostrar hashes dos commits criados e, se houve push, o range enviado
+- Confirmar `git status` limpo; `git log origin/main..HEAD` deve estar vazio se o push foi feito — se o usuário recusou o push, dizer explicitamente quantos commits seguem locais
 - Se algum `.csp`/`.cls` commitado ainda não foi compilado no servidor, lembrar o usuário
 - Se o repositório for um plugin do Claude Code (existe `.claude-plugin/marketplace.json` ou `.claude-plugin/plugin.json` na raiz) e o commit alterou arquivos do plugin, lembrar: instalação não atualiza sozinha em outras máquinas/projetos — rodar `/plugin marketplace update <nome-marketplace>` e `/plugin update <nome-plugin>` em cada uma para pegar a mudança
 
