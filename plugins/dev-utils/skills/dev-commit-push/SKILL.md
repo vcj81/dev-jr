@@ -22,7 +22,7 @@ Se não houver nada para commitar nem para enviar, informar e encerrar.
 
 ## 3. Verificar se o código foi comentado
 
-Antes de propor o commit, checar se cada bloco alterado tem comentário de rastreio no padrão da skill `dev-comentarios` (`[Alteração] Autor: Junior | Data/Hora: ...`).
+Antes de propor o commit, checar se cada bloco alterado tem comentário de rastreio no padrão da skill `dev-comentarios` (`[Alteração] Autor: <usuário do GitHub> | Data/Hora: ...`). A checagem só olha a presença do marcador `[Alteração]` — não valida qual nome está no campo Autor.
 
 Como checar: para cada arquivo de código **modificado** (novos, deletados, dados/config e mudanças cosméticas ficam de fora — mesmos critérios da `dev-comentarios`), comparar os hunks de `git diff -U3` / `git diff --cached -U3` com os marcadores `[Alteração]` presentes no diff. Bloco alterado sem marcador correspondente = faltante.
 

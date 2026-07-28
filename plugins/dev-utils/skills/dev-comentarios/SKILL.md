@@ -1,6 +1,6 @@
 ---
 name: dev-comentarios
-description: Comentários obrigatórios no código, em PT-BR — em arquivo NOVO, explicação didática no topo + comentários inline; em arquivo ALTERADO, um comentário por bloco alterado com Autor Junior, Data/Hora e o porquê da mudança. Usar SEMPRE antes de criar um arquivo novo, ao comentar/documentar alterações pendentes, antes de commitar, ou quando o usuário invocar /dev-comentarios.
+description: Comentários obrigatórios no código, em PT-BR — em arquivo NOVO, explicação didática no topo + comentários inline; em arquivo ALTERADO, um comentário por bloco alterado com Autor (usuário do GitHub), Data/Hora e o porquê da mudança. Usar SEMPRE antes de criar um arquivo novo, ao comentar/documentar alterações pendentes, antes de commitar, ou quando o usuário invocar /dev-comentarios.
 ---
 
 # Comentários no código
@@ -47,23 +47,41 @@ Considerar apenas arquivos de **código** já existentes (modificados). Ficam de
 - Dados/config/gerados: `.json`, `.md`, `.yml`, `.yaml`, `.lock`, `.csv`, `.env*`, minificados, `dist/`, `build/`, `node_modules/`
 - Mudança puramente cosmética (só indentação/espaço em branco, sem mudança de comportamento)
 
-## B2. Pegar a data/hora real
+## B2. Pegar o autor e a data/hora reais
 
-Sempre obter do sistema, nunca chutar:
+Sempre obter do sistema, nunca chutar nem escrever nome fixo.
+
+**Autor** — usuário do GitHub, resolvido nesta ordem (para no primeiro que retornar valor não vazio):
+
+```powershell
+gh api user --jq ".login"   # 1º: login real do GitHub (se o gh CLI estiver instalado e autenticado)
+git config user.name        # 2º: fallback
+```
+
+Se os dois falharem ou vierem vazios, perguntar o usuário do GitHub antes de inserir qualquer comentário — não inventar e não usar "Claude".
+
+**Data/hora**:
 
 ```powershell
 Get-Date -Format "dd/MM/yyyy HH:mm"
 ```
 
-Usar o mesmo carimbo para todos os blocos da mesma rodada de alterações.
+Resolver autor e data/hora **uma vez por rodada** e usar o mesmo par em todos os blocos daquela rodada.
 
 ## B3. Inserir o comentário em cada bloco alterado
 
 Formato padrão, na sintaxe de comentário da linguagem do arquivo, imediatamente **acima** do bloco alterado e na mesma indentação dele:
 
 ```
-// [Alteração] Autor: Junior | Data/Hora: 28/07/2026 14:32
+// [Alteração] Autor: <usuário do GitHub> | Data/Hora: <dd/MM/yyyy HH:mm>
 // <o que mudou e por quê, 1–2 linhas>
+```
+
+Exemplo já resolvido (autor vindo do B2, não digitado à mão):
+
+```
+// [Alteração] Autor: ciaca-jr | Data/Hora: 28/07/2026 14:32
+// compara tipo também, senão "0" passava como válido
 ```
 
 Regras de posicionamento:
@@ -99,6 +117,6 @@ Ao terminar, mostrar ao usuário:
 # Regras gerais
 
 - Comentários em **PT-BR**; termos técnicos consagrados (test, id, status) podem ficar em inglês.
-- Autor é **sempre** `Junior` — nunca o usuário do git, nunca "Claude", nunca atribuição de IA.
+- Autor é **sempre** o usuário do GitHub resolvido no B2 — nunca nome fixo no texto da skill, nunca "Claude", nunca atribuição de IA.
 - O comentário explica o **porquê**, não traduz a linha (`// troca == por ===` é ruim; `// compara tipo também, senão "0" passava como válido` é bom).
 - Nunca commitar nem fazer push aqui — esta skill só escreve/edita arquivos. Commit é da `dev-commit-push`.
