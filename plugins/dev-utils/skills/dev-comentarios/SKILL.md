@@ -90,7 +90,7 @@ Regras de posicionamento:
 - Se o bloco alterado é o corpo inteiro de uma função/método, o comentário vai acima da assinatura.
 - Se o mesmo arquivo tem alterações independentes em pontos distantes, cada ponto ganha seu comentário.
 - Nunca reescrever, reindentar ou reformatar o código ao inserir o comentário — só adicionar linhas.
-- Se já existir um `[Alteração]` do mesmo bloco de uma rodada anterior, **não apagar**: adicionar o novo abaixo do antigo (histórico cresce em ordem cronológica).
+- Se já existir um ou mais `[Alteração]` do mesmo bloco de rodadas anteriores, **apagar os antigos** e deixar só o comentário desta rodada. O bloco mantém apenas o último registro — o histórico completo fica no git.
 - Se o mesmo bloco já foi marcado nesta mesma rodada, não duplicar.
 
 ## B4. Relatar
