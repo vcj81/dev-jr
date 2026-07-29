@@ -81,6 +81,14 @@ Perguntar com AskUserQuestion: enviar agora (`git push origin main`) / não envi
 - Se algum `.csp`/`.cls` commitado ainda não foi compilado no servidor, lembrar o usuário
 - Se o repositório for um plugin do Claude Code (existe `.claude-plugin/marketplace.json` ou `.claude-plugin/plugin.json` na raiz) e o commit alterou arquivos do plugin, lembrar: instalação não atualiza sozinha em outras máquinas/projetos — rodar `/plugin marketplace update <nome-marketplace>` e `/plugin update <nome-plugin>` em cada uma para pegar a mudança
 
+## 8. Sugerir o deploy
+
+Encerrar **sempre** sugerindo o próximo passo, como última linha da resposta — vale tanto para push feito quanto para push recusado:
+
+> Próximo passo: `/dev-utils:dev-deploy-prod` para publicar em produção.
+
+A sugestão é só um convite — não invocar a skill nem fazer deploy por conta própria; esperar o usuário pedir.
+
 ## Regras
 
 - Mensagens sem corpo quando o diff é autoexplicativo; corpo apenas para "porquê" não óbvio
