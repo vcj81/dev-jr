@@ -100,6 +100,12 @@ Ao terminar, mostrar ao usuário:
 - Lista `arquivo:linha` de cada comentário inserido, com o resumo usado
 - Arquivos alterados que foram **pulados** e o motivo (novo, dado/config, cosmético)
 
+E encerrar **sempre** sugerindo o próximo passo, como última linha da resposta:
+
+> Próximo passo: `/dev-utils:dev-commit-push` para commitar as alterações.
+
+A sugestão é só um convite — não invocar a skill nem commitar por conta própria; esperar o usuário pedir.
+
 ---
 
 # Sintaxe de comentário por linguagem
@@ -120,3 +126,4 @@ Ao terminar, mostrar ao usuário:
 - Autor é **sempre** o usuário do GitHub resolvido no B2 — nunca nome fixo no texto da skill, nunca "Claude", nunca atribuição de IA.
 - O comentário explica o **porquê**, não traduz a linha (`// troca == por ===` é ruim; `// compara tipo também, senão "0" passava como válido` é bom).
 - Nunca commitar nem fazer push aqui — esta skill só escreve/edita arquivos. Commit é da `dev-commit-push`.
+- Toda rodada desta skill — parte A, parte B ou as duas — termina sugerindo `/dev-utils:dev-commit-push` na última linha da resposta.
