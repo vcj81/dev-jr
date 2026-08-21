@@ -1,11 +1,15 @@
 ---
 name: dev-padroes-projeto
-description: Padrões de arquitetura obrigatórios para todo projeto novo ou nova fase de projeto — inclui a exigência de que toda interface web nasça preparada para instalação como PWA. Usar SEMPRE ao iniciar um projeto novo, planejar uma nova fase/módulo com frontend, ou quando o usuário invocar /dev-padroes-projeto.
+description: Padrões de arquitetura obrigatórios para todo projeto que usa este plugin — inclui a exigência de que toda interface web nasça preparada para instalação como PWA. Usar SEMPRE ao iniciar um projeto novo, planejar uma nova fase/módulo com frontend, ao revisar/auditar um projeto já existente contra esses padrões, ou quando o usuário invocar /dev-padroes-projeto.
 ---
 
 # Padrões de projeto
 
-Padrões de arquitetura que valem para **todos** os projetos do usuário. Consultar ao iniciar um projeto novo, ao planejar uma fase que inclua frontend, e ao revisar propostas de arquitetura.
+Padrões de arquitetura que valem para **todos** os projetos do usuário que usam este plugin. Consultar em três momentos:
+
+1. **Projeto novo / fase nova com frontend** — aplicar os padrões desde o início, não deixar "para depois".
+2. **Revisão de projeto já existente** — auditar contra os padrões abaixo e propor alterações, uma a uma, para aprovação do usuário (ver seção "Revisão de projeto existente").
+3. **Uso contínuo** — em qualquer projeto que use este plugin, ficar atento a gaps contra os Padrões de Projeto Modernos listados aqui e sugerir ajuste ao usuário quando notar um, mesmo sem pedido explícito.
 
 ## 1. Toda interface web deve ser instalável como PWA
 
@@ -27,3 +31,13 @@ Regras práticas:
 ## 2. Como aplicar em backends existentes
 
 Se o projeto já tem backend (ex.: FastAPI) e o frontend vier depois, o próprio backend pode servir os arquivos do PWA (manifest, service worker, ícones) como arquivos estáticos — não é preciso servidor separado.
+
+## 3. Revisão de projeto existente
+
+Quando o usuário pedir para revisar/auditar um projeto já existente, ou ao notar que um projeto usa este plugin sem seguir os padrões acima:
+
+1. **Levantar o estado atual**: procurar `manifest.json`, service worker registrado, `<link rel="manifest">`, meta tags de tema, e checar se produção roda em HTTPS.
+2. **Listar os gaps** encontrados contra cada regra da seção 1 (e futuras regras que forem adicionadas aqui).
+3. **Propor alterações uma de cada vez**, em ordem de impacto (ex.: manifest antes de ícones), explicando o "por quê" de cada uma.
+4. **Esperar aprovação do usuário antes de aplicar** cada alteração — não aplicar tudo de uma vez sem confirmação.
+5. Não sugerir reescrita ou refatoração fora do escopo dos padrões desta skill (isso é trabalho de outra ferramenta/skill).
