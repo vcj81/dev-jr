@@ -7,6 +7,16 @@ description: Commit + push das últimas alterações no git. Lista os arquivos a
 
 Fluxo obrigatório — NUNCA commitar ou fazer push antes da aprovação explícita do usuário. Commit e push são **duas aprovações separadas**: aprovar o commit nunca autoriza o push.
 
+## 0. Escolher modo de trabalho (sempre perguntar primeiro)
+
+Antes de levantar alterações, perguntar com AskUserQuestion o modo desta rodada:
+
+- **Commitar direto na branch atual/MAIN** — fluxo padrão de sempre, segue normal pros passos 1–8, push final em `origin/main` (ou branch atual).
+- **Salvar na branch DEV** — pra ir acumulando pequenas alterações antes de validar. Se a branch `DEV` não existir localmente, criar com `git checkout -b DEV` a partir do estado atual; se já existir, `git checkout DEV` (avisar se houver mudanças não commitadas impedindo o checkout). Commit segue passos 1–5 normalmente. No passo 6, o push é pra `origin/DEV`, não `origin/main`.
+- **Promover DEV → MAIN** — quando as alterações acumuladas em DEV já foram validadas. Confirmar que a branch `DEV` existe e tem commits à frente de `main` (`git log main..DEV --oneline`), mostrar a lista pro usuário, perguntar aprovação, e só então: `git checkout main`, `git merge DEV` (sem `--no-ff` a menos que o usuário peça), e seguir pro passo 6 (push de main) usando o fluxo normal. Não apagar a branch DEV automaticamente — só perguntar se quer apagar depois do merge confirmado.
+
+Guardar o modo escolhido e a branch de trabalho resultante — os passos seguintes usam essa branch em vez de assumir `main` fixo.
+
 ## 1. Levantar alterações
 
 - `git status --short` — arquivos modificados/novos/deletados
@@ -64,14 +74,16 @@ Usar AskUserQuestion com opções: aprovar como está / editar mensagem / escolh
 
 O push **nunca** é automático, mesmo que o usuário tenha aprovado o commit e mesmo que a skill tenha sido invocada como "commitar e enviar".
 
+A branch de destino do push é a branch de trabalho definida no passo 0 (`main`, `DEV`, ou `main` no caso de promoção DEV → MAIN).
+
 Mostrar antes de perguntar:
 
-- Hashes e mensagens dos commits pendentes de envio (`git log origin/main..HEAD --oneline`)
-- Branch e remoto de destino (ex.: `origin/main`)
+- Hashes e mensagens dos commits pendentes de envio (`git log origin/<branch>..HEAD --oneline`)
+- Branch e remoto de destino (ex.: `origin/main` ou `origin/DEV`)
 
-Perguntar com AskUserQuestion: enviar agora (`git push origin main`) / não enviar agora.
+Perguntar com AskUserQuestion: enviar agora (`git push origin <branch>`) / não enviar agora.
 
-- **Enviar agora** → executar `git push origin main` e seguir ao passo 7.
+- **Enviar agora** → executar `git push origin <branch>` (se a branch `DEV` ainda não existir no remoto, usar `git push -u origin DEV`) e seguir ao passo 7.
 - **Não enviar agora** → encerrar informando que os commits ficaram locais e que na próxima execução da skill a pergunta do push será refeita (passo 1).
 
 ## 7. Confirmar resultado
