@@ -1,6 +1,17 @@
 {
-  "description": "PreToolUse (Write): bloqueia arquivo novo de codigo sem comentarios minimos (reforca a parte A da skill dev-comentarios). Notification/Stop: som + notificacao do Windows.",
+  "description": "PreToolUse (Write): bloqueia arquivo novo de codigo sem comentarios minimos (reforca a parte A da skill dev-comentarios). Notification/Stop: som + notificacao do Windows. SessionStart: avisa se ha atualizacao pendente do plugin dev-utils.",
   "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PLUGIN_ROOT}/scripts/check-plugin-update.ps1\"",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Write",
