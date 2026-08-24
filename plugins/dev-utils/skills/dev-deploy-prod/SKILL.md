@@ -75,6 +75,14 @@ Sobre o backup:
 
 Reportar: itens enviados, saída de compilação ("Compilation finished successfully"), e o que foi executado no pós-deploy. Lembrar o usuário de testar a tela em produção.
 
+## 6. Artefato (Claude Artifact)
+
+Se o projeto tiver um Artefato publicado associado (URL `https://claude.ai/code/artifact/...` referenciada em README, docs, CLAUDE.md, memória do projeto ou mencionada pelo usuário na conversa), perguntar ao usuário se deseja atualizá-lo com o resultado deste deploy. Ex.: `https://claude.ai/code/artifact/06cd525f-77c1-4215-8267-a9feee6e9b2f`.
+
+- Se sim: usar a ferramenta Artifact com `action: "publish"` e o mesmo `url`, apontando pro arquivo local correspondente (não criar artefato novo).
+- Se não souber a URL do artefato, usar `action: "list"` pra localizar antes de perguntar.
+- Nunca atualizar sem confirmação explícita do usuário.
+
 ## Regras
 
 - Só deployar o que está compilando sem erro na homologação (perguntar se não souber)
