@@ -1,5 +1,5 @@
 {
-  "description": "PreToolUse (Write): bloqueia arquivo novo de codigo sem comentarios minimos (reforca a parte A da skill dev-comentarios). Notification/Stop: som + notificacao do Windows. SessionStart: avisa se ha atualizacao pendente do plugin dev-utils.",
+  "description": "PreToolUse (Write): bloqueia arquivo novo de codigo sem comentarios minimos (reforca a secao 3.1 da skill dev-commit-push). Notification/Stop: som + notificacao do Windows. SessionStart: avisa se ha atualizacao pendente do plugin dev-utils.",
   "hooks": {
     "SessionStart": [
       {

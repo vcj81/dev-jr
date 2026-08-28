@@ -1,8 +1,10 @@
 # Hook PreToolUse (matcher: Write) - forca documentacao didatica em arquivo novo de codigo.
 # Bloqueia (deny) a escrita se o arquivo e novo, e de uma linguagem mapeada,
 # tem mais que poucas linhas, e nao tem pelo menos 2 linhas de comentario
-# (proxy para "explicacao no topo" + "comentario inline" exigidos pela parte A da skill dev-comentarios).
+# (proxy para "explicacao no topo" + "comentario inline" exigidos pela secao 3.1 da skill dev-commit-push).
 # Heuristica grosseira de proposito: nao avalia qualidade do texto, so presenca minima.
+# [Alteracao] Autor: vcj81 | Data/Hora: 28/08/2026 08:56
+# skill dev-comentarios foi migrada pra dev-commit-push; texto so referencia a nova secao.
 
 $ErrorActionPreference = 'Stop'
 
@@ -45,7 +47,7 @@ if ($nonBlank.Count -le 3) { exit 0 }  # arquivo trivial - nao forca
 $commentLines = ($lines | Where-Object { $_ -match $pattern }).Count
 
 if ($commentLines -lt 2) {
-    $reason = "Skill dev-comentarios (parte A): arquivo novo de codigo sem documentacao didatica minima. Antes de escrever, adicione (1) explicacao geral no topo (2-4 linhas, sintaxe de comentario da linguagem) e (2) comentarios inline nos trechos relevantes, em PT-BR. Reescreva o Write com os comentarios incluidos."
+    $reason = "Skill dev-commit-push (secao 3.1): arquivo novo de codigo sem documentacao didatica minima. Antes de escrever, adicione (1) explicacao geral no topo (2-4 linhas, sintaxe de comentario da linguagem) e (2) comentarios inline nos trechos relevantes, em PT-BR. Reescreva o Write com os comentarios incluidos."
     $output = @{
         hookSpecificOutput = @{
             hookEventName = "PreToolUse"
