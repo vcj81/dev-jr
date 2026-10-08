@@ -1,5 +1,5 @@
 {
-  "description": "PreToolUse (Write): bloqueia arquivo novo de codigo sem comentarios minimos (reforca a secao 3.1 da skill dev-commit-push). Notification/Stop: som + notificacao do Windows. SessionStart: avisa se ha atualizacao pendente do plugin dev-utils.",
+  "description": "PreToolUse (Write): bloqueia arquivo novo de codigo sem comentarios minimos (reforca a secao 3.1 da skill dev-commit-push). Notification/Stop: som + notificacao do Windows. SessionStart: avisa se ha atualizacao pendente do plugin dev-utils e injeta os Padroes de Projeto (instrucoes/padroes-projeto.md) como instrucoes da sessao.",
   "hooks": {
     "SessionStart": [
       {
@@ -7,6 +7,11 @@
           {
             "type": "command",
             "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PLUGIN_ROOT}/scripts/check-plugin-update.ps1\"",
+            "timeout": 15
+          },
+          {
+            "type": "command",
+            "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PLUGIN_ROOT}/scripts/load-padroes-projeto.ps1\"",
             "timeout": 15
           }
         ]
