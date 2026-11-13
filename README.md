@@ -10,13 +10,13 @@ Plugin do Claude Code com alertas e skills de fluxo de trabalho.
 
 ## Padrões de Projeto (instruções automáticas)
 
-Não é mais uma skill/comando: o conteúdo de `instrucoes/padroes-projeto.md` é injetado em toda sessão de todo projeto que usa o plugin e deve ser seguido sempre — toda interface web deve nascer preparada para instalação como PWA (manifest, service worker, HTTPS), com revisão de projetos existentes e sugestões contínuas de ajuste. Para mudar os padrões, edite esse arquivo.
+Não é mais uma skill/comando: o conteúdo de `instrucoes/padroes-projeto.md` é injetado em toda sessão de todo projeto que usa o plugin e deve ser seguido sempre — toda interface web deve nascer preparada para instalação como PWA (manifest, service worker, HTTPS), e todo arquivo deve estar em UTF-8 com charset explícito nas páginas (acentuação igual em homologação e produção), com revisão de projetos existentes e sugestões contínuas de ajuste. Para mudar os padrões, edite esse arquivo.
 
 ## Skills
 
-- **dev-commit-push** — commit + push com aprovação prévia obrigatória da mensagem e dos arquivos; antes de propor o commit, avisa se o código foi comentado e lista os blocos alterados sem comentário
+- **dev-commit-push** — commit + push com aprovação prévia obrigatória da mensagem e dos arquivos; antes de propor o commit, avisa se o código foi comentado e lista os blocos alterados sem comentário, e checa a acentuação/encoding dos arquivos do commit
 - **dev-comentarios** — comentários obrigatórios em PT-BR: em arquivo **novo**, explicação didática no topo + comentários inline (o usuário está aprendendo a linguagem); em arquivo **alterado**, um comentário por bloco alterado com `Autor: <usuário do GitHub>` (resolvido via `gh api user`, com fallback `git config user.name`), Data/Hora e o porquê da mudança
-- **dev-deploy-prod** — deploy de classes/páginas num servidor IRIS/Caché de produção via API Atelier, com aprovação prévia da lista de itens, backup XML automático (rollback) e retenção dos 3 mais recentes. Config/segredos/backups ficam sempre no repositório alvo (`.claude/dev-deploy-prod/`), nunca no plugin — espera repo com estrutura `src/cls`, `src/mac`, `src/inc`, `src/oth`
+- **dev-deploy-prod** — deploy de classes/páginas num servidor IRIS/Caché de produção via API Atelier, com aprovação prévia da lista de itens, backup XML automático (rollback) e retenção dos 3 mais recentes. **Verificação de acentuação** em todo deploy (`acentuacao.py`): bloqueia arquivo fora de UTF-8 ou com acento corrompido, compara com a versão atual de produção, testa a gravação no servidor com uma sonda temporária antes de enviar, confere cada item depois de gravado (divergência cancela a compilação) e confere as páginas CSP compiladas; `--verificar` roda só a parte que não grava nada. Config/segredos/backups ficam sempre no repositório alvo (`.claude/dev-deploy-prod/`), nunca no plugin — espera repo com estrutura `src/cls`, `src/mac`, `src/inc`, `src/oth`
 
 ## Instalação em uma máquina nova
 
@@ -48,6 +48,7 @@ plugins/dev-utils/
   skills/dev-comentarios/SKILL.md    # arquivo novo (didático) + blocos alterados (Autor do GitHub + Data/Hora)
   skills/dev-deploy-prod/SKILL.md    # deploy em produção IRIS/Caché (API Atelier)
   skills/dev-deploy-prod/deploy.py   # script do deploy (config/backups ficam no repo alvo)
+  skills/dev-deploy-prod/acentuacao.py # verificação/correção de acentuação e encoding (usado no deploy e no commit)
   skills/dev-deploy-prod/.env.example
 ```
 

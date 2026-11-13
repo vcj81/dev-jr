@@ -118,6 +118,20 @@ Reportar sempre, mesmo quando estiver tudo certo:
 
 Se houver faltantes, perguntar com AskUserQuestion antes de seguir: comentar agora (aplicar 3.1/3.2 nos itens faltantes) / commitar mesmo assim sem comentar / cancelar. Se o usuário escolher comentar, aplicar as regras acima e só então voltar ao passo 4 — refazendo o `git status`/`git diff`, já que os arquivos mudaram.
 
+### 3.4. Checar acentuação dos arquivos do commit
+
+Pega cedo o que depois "desconfigura" labels em produção (Padrões de Projeto, seção de acentuação). Rodar o verificador do deploy nos arquivos de texto novos/modificados que vão entrar no commit (deletados ficam de fora; binários ele mesmo ignora):
+
+```powershell
+python "<base directory>/../dev-deploy-prod/acentuacao.py" <arquivo1> <arquivo2> ...
+```
+
+(`<base directory>` = caminho mostrado em "Base directory for this skill" — o script fica na skill vizinha `dev-deploy-prod`.)
+
+- **ERRO** (arquivo fora de UTF-8, texto corrompido tipo `Ã` + `§` no lugar de `ç`, acento já perdido): mostrar os achados e perguntar com AskUserQuestion — corrigir agora / commitar mesmo assim / cancelar. Corrigir = mostrar a prévia com `--corrigir`, e só com aprovação rodar `--corrigir --aplicar`; acento perdido se corrige redigitando. Depois de corrigir, refazer `git status`/`git diff`.
+- **AVISO**: listar em uma linha por arquivo junto da proposta do passo 4, sem bloquear.
+- Falso positivo: a linha pode levar um comentário com `acentuacao: ignorar`.
+
 ## 4. Propor e aguardar aprovação
 
 Mostrar ao usuário, antes de qualquer commit:
