@@ -1,6 +1,6 @@
 ---
 name: dev-commit-push
-description: Commit + push das últimas alterações no git. Lista os arquivos alterados e propõe a mensagem de commit para aprovação ou edição do usuário ANTES de commitar. O push NUNCA é automático — é sempre perguntado em separado, depois do commit. Antes de commitar, garante que todo bloco de código alterado tenha comentário de rastreio (Autor/Data/Hora) e que todo arquivo novo tenha documentação didática — perguntando se ainda não foi feito no momento da alteração. Usar quando o usuário pedir para commitar/enviar alterações ao git ou invocar /dev-commit-push.
+description: Commit + push das últimas alterações no git. Lista os arquivos alterados e propõe a mensagem de commit para aprovação ou edição do usuário ANTES de commitar. O push NUNCA é automático — é sempre perguntado em separado, depois do commit. Antes de commitar, garante que cada linha/bloco de código alterado tenha comentário de rastreio (Autor/Data/Hora + o que mudou), substituindo comentários de alterações anteriores daquele trecho, sem texto explicativo no começo de páginas, classes ou arquivos — perguntando se ainda não foi feito no momento da alteração. Usar quando o usuário pedir para commitar/enviar alterações ao git ou invocar /dev-commit-push.
 ---
 
 # Commit + Push com aprovação prévia
@@ -34,25 +34,17 @@ Decidir a partir daí:
 - Mudanças não relacionadas → commits separados
 - Identificar ruído (arquivos de configuração local, reexportação sem mudança real de conteúdo, ex.: `.vscode/settings.json`, minificados rejuntados) e propor deixar de fora ou descartar
 
-## 3. Garantir comentários no código antes do commit
+## 3. Garantir o comentário das alterações antes do commit
 
-Regra: nada de bloco de código alterado (ou arquivo novo) sem comentário em PT-BR. Esta etapa cobre as duas situações — se o Claude já comentou no momento da alteração, aqui é só conferência; se não comentou, pergunta e resolve antes de seguir.
+Regra: comentar **apenas a linha ou o bloco de código que foi alterado**, dizendo o que mudou, em PT-BR. Esta etapa cobre as duas situações — se o Claude já comentou no momento da alteração, aqui é só conferência; se não comentou, pergunta e resolve antes de seguir.
 
-### 3.1. Arquivo novo → documentação didática
+### 3.1. O que não fazer
 
-Todo arquivo novo criado pelo Claude deve estar autoexplicativo, em dois níveis:
+- **Nunca** inserir no começo de página, classe ou arquivo um texto explicando o arquivo (o que faz, como se encaixa no sistema) nem um resumo das alterações feitas nele. O comentário fica colado no trecho que mudou.
+- Arquivo **novo** não recebe comentário desta rotina: sem cabeçalho, sem documentação didática e sem marcador `[Alteração]` — a criação já fica registrada no git.
+- Não comentar linha que não mudou nesta rodada.
 
-1. **Explicação geral no topo** (2–4 linhas): o que o arquivo faz e como se encaixa no sistema, na sintaxe de comentário/docstring da própria linguagem.
-2. **Comentários inline**: ao longo do código, explicando os trechos relevantes — o que cada bloco/função faz e, quando houver, a regra de negócio por trás.
-
-Regras:
-
-- Comentar para ensinar, não para repetir o óbvio: explicar o porquê e o papel do trecho, não traduzir linha a linha.
-- Arquivo novo **não** leva marcador `[Alteração]` — o arquivo inteiro é novo, não há bloco alterado.
-
-Há um hook `PreToolUse` (`scripts/check-novo-arquivo.ps1`) que bloqueia o `Write` de arquivo novo em linguagem mapeada (py, js/ts, java, c/cpp/cs, go, php, rb, ps1, sh, css, html, sql, rs, kt, swift) quando o conteúdo tem mais de 3 linhas não vazias e menos de 2 linhas de comentário — rede de segurança grosseira, só verifica presença mínima, não qualidade.
-
-### 3.2. Arquivo alterado → rastreio da alteração
+### 3.2. Arquivo alterado → comentário na linha/bloco alterado
 
 **Levantar os blocos alterados:**
 
@@ -60,7 +52,7 @@ Há um hook `PreToolUse` (`scripts/check-novo-arquivo.ps1`) que bloqueia o `Writ
 
 Considerar apenas arquivos de **código** já existentes (modificados). Ficam de fora:
 
-- Arquivos novos → regra 3.1
+- Arquivos novos (ver 3.1)
 - Arquivos deletados
 - Dados/config/gerados: `.json`, `.md`, `.yml`, `.yaml`, `.lock`, `.csv`, `.env*`, minificados, `dist/`, `build/`, `node_modules/`
 - Mudança puramente cosmética (só indentação/espaço em branco, sem mudança de comportamento)
@@ -84,11 +76,11 @@ Get-Date -Format "dd/MM/yyyy HH:mm"
 
 Resolver autor e data/hora **uma vez por rodada** e usar o mesmo par em todos os blocos daquela rodada.
 
-**Inserir o comentário em cada bloco alterado**, na sintaxe de comentário da linguagem do arquivo, imediatamente **acima** do bloco alterado e na mesma indentação dele:
+**Inserir o comentário em cada linha/bloco alterado**, na sintaxe de comentário da linguagem do arquivo, imediatamente **acima** da linha/bloco alterado e na mesma indentação:
 
 ```
 // [Alteração] Autor: <usuário do GitHub> | Data/Hora: <dd/MM/yyyy HH:mm>
-// <o que mudou e por quê, 1–2 linhas>
+// <o que foi alterado, em uma linha>
 ```
 
 Exemplo já resolvido (autor vindo da resolução acima, não digitado à mão):
@@ -98,25 +90,30 @@ Exemplo já resolvido (autor vindo da resolução acima, não digitado à mão):
 // compara tipo também, senão "0" passava como válido
 ```
 
+**Substituir comentários de alterações anteriores.** Se o trecho alterado já tiver comentário de alteração de rodadas anteriores — logo acima dele, no meio dele ou no fim de uma de suas linhas —, **apagar** e deixar só o comentário desta rodada. Vale para o marcador `[Alteração]` e para qualquer outro formato de registro de alteração (`Alterado por ...`, `Ajuste em dd/mm/aaaa ...`, iniciais + data), em qualquer sintaxe de comentário da linguagem — inclusive `;` e `#;` do ObjectScript legado. O trecho mantém só o último registro; o histórico completo fica no git. Comentário que só explica o funcionamento do código (não é registro de alteração) fica onde está.
+
 Regras de posicionamento:
 
 - Um comentário por bloco lógico alterado, não por linha. Linhas contíguas que mudaram pelo mesmo motivo = um comentário só.
-- Se o bloco alterado é o corpo inteiro de uma função/método, o comentário vai acima da assinatura.
-- Se o mesmo arquivo tem alterações independentes em pontos distantes, cada ponto ganha seu comentário.
-- Nunca reescrever, reindentar ou reformatar o código ao inserir o comentário — só adicionar linhas.
-- Se já existir um ou mais `[Alteração]` do mesmo bloco de rodadas anteriores, **apagar os antigos** e deixar só o comentário desta rodada. O bloco mantém apenas o último registro — o histórico completo fica no git.
+- Se o bloco alterado é o corpo inteiro de uma função/método, ou um método novo numa classe existente, o comentário vai acima da assinatura.
+- Se o mesmo arquivo tem alterações independentes em pontos distantes, cada ponto ganha seu comentário — nunca um resumo único no começo do arquivo.
+- Nunca reescrever, reindentar ou reformatar o código ao inserir o comentário — só mexer nos comentários.
 - Se o mesmo bloco já foi marcado nesta mesma rodada, não duplicar.
 
 ### 3.3. Checar antes de propor o commit
 
-Comparar os hunks de `git diff -U3` / `git diff --cached -U3` com os marcadores `[Alteração]` presentes no diff (a checagem só olha a presença do marcador — não valida qual nome está no campo Autor). Bloco alterado sem marcador correspondente = faltante. Arquivo novo sem explicação no topo/comentários inline = faltante.
+Comparar os hunks de `git diff -U3` / `git diff --cached -U3` com os marcadores `[Alteração]` presentes no diff (a checagem só olha a presença do marcador — não valida qual nome está no campo Autor):
+
+- **Faltante**: bloco alterado sem marcador correspondente.
+- **A corrigir**: texto explicativo ou cabeçalho adicionado no começo de página, classe ou arquivo (inclusive em arquivo novo); marcador longe do bloco que mudou (ex.: resumo das alterações no topo do arquivo); comentário de alteração anterior que ficou no trecho junto do novo.
 
 Reportar sempre, mesmo quando estiver tudo certo:
 
 - **Comentários já presentes**: lista `arquivo:linha` + o texto do marcador
-- **Blocos alterados/arquivos novos sem comentário**: lista `arquivo:linha` + resumo de uma linha do que mudou ali
+- **Blocos alterados sem comentário**: lista `arquivo:linha` + resumo de uma linha do que mudou ali
+- **Comentários a corrigir**: lista `arquivo:linha` + o problema
 
-Se houver faltantes, perguntar com AskUserQuestion antes de seguir: comentar agora (aplicar 3.1/3.2 nos itens faltantes) / commitar mesmo assim sem comentar / cancelar. Se o usuário escolher comentar, aplicar as regras acima e só então voltar ao passo 4 — refazendo o `git status`/`git diff`, já que os arquivos mudaram.
+Se houver faltantes ou itens a corrigir, perguntar com AskUserQuestion antes de seguir: ajustar agora (aplicar 3.1/3.2 nos itens) / commitar mesmo assim / cancelar. Se o usuário escolher ajustar, aplicar as regras acima e só então voltar ao passo 4 — refazendo o `git status`/`git diff`, já que os arquivos mudaram.
 
 ### 3.4. Checar acentuação dos arquivos do commit
 
@@ -202,7 +199,7 @@ A sugestão é só um convite — não invocar a skill nem fazer deploy por cont
 
 - Comentários de rastreio em **PT-BR**; termos técnicos consagrados (test, id, status) podem ficar em inglês.
 - Autor é **sempre** o usuário do GitHub resolvido em 3.2 — nunca nome fixo no texto da skill, nunca "Claude", nunca atribuição de IA.
-- O comentário explica o **porquê**, não traduz a linha (`// troca == por ===` é ruim; `// compara tipo também, senão "0" passava como válido` é bom).
+- O comentário diz **o que mudou** em uma linha, com o porquê quando couber — sem traduzir o código (`// troca == por ===` é ruim; `// compara tipo também, senão "0" passava como válido` é bom).
 - Mensagens de commit sem corpo quando o diff é autoexplicativo; corpo apenas para "porquê" não óbvio
 - Sem atribuição de IA ou emoji nas mensagens — isso inclui o rodapé `Co-Authored-By: Claude ...` que as instruções padrão do ambiente pedem: neste repositório essa regra prevalece e o rodapé NUNCA deve ser adicionado (é ele que gera as linhas ocultas no prompt)
 - Nunca usar `--force`, `--amend` ou `--no-verify`
