@@ -1,7 +1,7 @@
 {
   "name": "dev-utils",
-  "version": "2.3.0",
-  "description": "Ferramentas do Claude Code: alertas sonoros e notificações do Windows, padrões de projeto (PWA obrigatório, UTF-8 e charset explícito) carregados automaticamente em toda sessão, e skills de fluxo de trabalho (commit com aprovação prévia e comentário de rastreio só na linha/bloco alterado, deploy em produção IRIS/Caché via API Atelier com verificação de acentuação)",
+  "version": "2.4.0",
+  "description": "Ferramentas do Claude Code: atualização automática do próprio plugin no início da sessão, alertas sonoros e notificações do Windows, padrões de projeto (PWA obrigatório, UTF-8 e charset explícito) carregados automaticamente em toda sessão, e skills de fluxo de trabalho (commit com aprovação prévia e comentário de rastreio só na linha/bloco alterado, deploy em produção IRIS/Caché via API Atelier com verificação de acentuação)",
   "author": {
     "name": "vcj81",
     "url": "https://github.com/vcj81"

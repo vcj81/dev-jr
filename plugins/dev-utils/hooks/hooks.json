@@ -1,5 +1,5 @@
 {
-  "description": "Notification/Stop: som + notificacao do Windows. SessionStart: avisa se ha atualizacao pendente do plugin dev-utils e injeta os Padroes de Projeto (instrucoes/padroes-projeto.md) como instrucoes da sessao.",
+  "description": "Notification/Stop: som + notificacao do Windows. SessionStart: atualiza sozinho o plugin dev-utils quando ha versao nova na marketplace dev-jr e injeta os Padroes de Projeto (instrucoes/padroes-projeto.md) como instrucoes da sessao.",
   "hooks": {
     "SessionStart": [
       {
@@ -7,7 +7,7 @@
           {
             "type": "command",
             "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PLUGIN_ROOT}/scripts/check-plugin-update.ps1\"",
-            "timeout": 15
+            "timeout": 120
           },
           {
             "type": "command",

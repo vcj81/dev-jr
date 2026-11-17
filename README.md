@@ -6,7 +6,7 @@ Plugin do Claude Code com alertas e skills de fluxo de trabalho.
 
 - **Notification** — som + toast do Windows quando o Claude precisa da sua interação (pedido de permissão ou pergunta)
 - **Stop** — som + toast quando o Claude termina a tarefa e fica aguardando
-- **SessionStart** — avisa se há atualização pendente do plugin e carrega os **Padrões de Projeto** (`instrucoes/padroes-projeto.md`) como instruções obrigatórias da sessão
+- **SessionStart** — atualiza o plugin sozinho quando há versão nova na marketplace (ver [Atualizações](#atualizações)) e carrega os **Padrões de Projeto** (`instrucoes/padroes-projeto.md`) como instruções obrigatórias da sessão
 
 ## Padrões de Projeto (instruções automáticas)
 
@@ -31,7 +31,29 @@ Ou, dentro de uma sessão interativa do Claude Code:
 /plugin install dev-utils@dev-jr
 ```
 
+Depois, ligue o auto-update da marketplace (vem desligado em marketplaces de terceiros): `/plugin` → aba **Marketplaces** → `dev-jr` → **Enable auto-update**. Ou, direto no `~/.claude/settings.json`:
+
+```json
+"extraKnownMarketplaces": {
+  "dev-jr": {
+    "source": { "source": "github", "repo": "vcj81/dev-jr" },
+    "autoUpdate": true
+  }
+}
+```
+
 Pronto — vale para todos os projetos da máquina.
+
+## Atualizações
+
+O plugin se mantém atualizado por dois caminhos, sem precisar rodar `/plugin marketplace update dev-jr` e `/plugin update dev-utils` à mão:
+
+- **Hook SessionStart** (`scripts/check-plugin-update.ps1`) — no início de cada sessão, compara a versão carregada no projeto com a do `origin/main` da marketplace. Se houver versão nova, roda `claude plugin marketplace update dev-jr` e `claude plugin update dev-utils@dev-jr` a partir da pasta do projeto (assim atualiza também instalações antigas de escopo projeto) e avisa na tela. A sessão aberta continua na versão anterior: a nova entra com `/reload-plugins` ou na próxima sessão.
+- **Auto-update nativo do Claude Code** (`"autoUpdate": true`, ver [Instalação](#instalação-em-uma-máquina-nova)) — reforço: alguns minutos depois da primeira mensagem da sessão, o próprio Claude Code atualiza a marketplace e o plugin.
+
+**Ao publicar mudanças no plugin, sempre suba o `version` em `plugins/dev-utils/.claude-plugin/plugin.json`.** É essa string que o Claude Code compara para saber se há atualização: commit sem mudar a versão não chega em nenhum projeto.
+
+Observação: `DISABLE_AUTOUPDATER=1`, `DISABLE_UPDATES=1` ou `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1` desligam o auto-update nativo (o hook continua funcionando); para religar, defina também `FORCE_AUTOUPDATE_PLUGINS=1`.
 
 ## Estrutura
 
@@ -42,6 +64,7 @@ plugins/dev-utils/
   hooks/hooks.json                   # hooks SessionStart, Notification e Stop
   instrucoes/padroes-projeto.md      # padrões de projeto (PWA obrigatório), injetados via SessionStart
   scripts/notify.ps1                 # som + toast do Windows
+  scripts/check-plugin-update.ps1    # atualiza o plugin sozinho no início da sessão quando há versão nova
   scripts/load-padroes-projeto.ps1   # injeta instrucoes/padroes-projeto.md no contexto da sessão
   skills/dev-commit-push/SKILL.md    # commit com aprovação prévia + comentário só nas linhas/blocos alterados
   skills/dev-deploy-prod/SKILL.md    # deploy em produção IRIS/Caché (API Atelier)
